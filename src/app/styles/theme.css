@@ -1,0 +1,56 @@
+:root {
+  --primary-color: #1a237e; /* Adjust based on logo */
+  --secondary-color: #25D366; /* WhatsApp green */
+  --background-color: #f7f7f7;
+  --text-color: #000000;
+  --footer-color: #000000;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  color: black;
+  background-color: var(--background-color);
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+section {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+h2, h3 {
+  color: var(--primary-color);
+}
+
+ul {
+  line-height: 2;
+}
+
+a {
+  display: inline-block;
+  background-color: var(--secondary-color);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--footer-color);
+}
