@@ -54,3 +54,42 @@ footer {
   padding: 1rem 0;
   color: var(--footer-color);
 }
+
+.fullscreen-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  background-color: var(--background-color);
+}
+
+.table-title {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+.fullscreen-table {
+  width: 90%;
+  border: 2px solid var(--primary-color); /* Border color matches the theme */
+  border-radius: 8px;
+  background-color: #fff;
+  border-collapse: collapse; /* Ensures borders don't overlap */
+}
+
+.fullscreen-table th,
+.fullscreen-table td {
+  border: 1px solid var(--primary-color); /* Adds border to each cell */
+  padding: 0.75rem;
+  vertical-align: top; /* Aligns content to the top */
+}
+
+.fullscreen-table th {
+  background-color: var(--primary-color);
+  color: #fff;
+  text-align: left;
+}
+
+.fullscreen-table td {
+  text-align: left;
+}

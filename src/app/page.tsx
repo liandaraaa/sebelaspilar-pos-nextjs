@@ -1,15 +1,12 @@
+'use client';
 import Image from 'next/image';
-import '../app/styles/theme.css'; // Import the CSS file
 
 export default function Home() {
   return (
     <main>
-      <header>
+      <section>
         <h1>CV Sebelas Pilar</h1>
         <p>Solusi Alat Perkantoran Terlengkap di Jabodetabek</p>
-      </header>
-
-      <section>
         <h2>Kenapa Pilih Kami?</h2>
         <ul>
           <li>Produk alat perkantoran lengkap & berkualitas</li>
