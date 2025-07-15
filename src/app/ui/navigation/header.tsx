@@ -4,36 +4,43 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/order', label: 'List Order' },
-  { href: '/stock', label: 'Stock Management' },
-  { href: '/payment', label: 'Payment Management' },
-  { href: '/report', label: 'Report' },
-  { href: '/settings', label: 'Settings' },
+  { href: '#why-choose-us', label: 'Why Choose Us?' },
+  { href: '#contact', label: 'Contact Us' },
+  { href: '/dashboard', label: 'Login' },
 ];
 
 export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>
+    <header 
+    style={{ 
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        padding: '1rem',
+        borderBottom: '1px solid #eee',
+        maxWidth: '100%'
+      }}>
       <nav>
-        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                style={{
-                  textDecoration: pathname === item.href ? 'underline' : 'none',
-                  color: pathname === item.href ? 'blue' : 'black',
-                }}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div style={{ padding:'1 rem', display: 'flex', justifyContent: 'space-between'}}>
+          <h1 style={{ margin: 0 }}>CV Sebelas Pilar</h1>
+          <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  style={{
+                    textDecoration: pathname === item.href ? 'underline' : 'none',
+                    color: pathname === item.href ? 'blue' : 'black',
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </nav>
     </header>
   );
