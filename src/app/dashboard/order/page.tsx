@@ -1,72 +1,13 @@
 'use client';
 
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
-
-type OrderStatus = "Pending" | "Dikonfirmasi" | "Selesai";
-type PaymentStatus = "Belum Bayar" | "Sebagian" | "Lunas";
-
-export interface Order {
-  id: string;
-  customer: string;
-  contact: string;
-  date: string;
-  total: number;
-  statusOrder: OrderStatus;
-  statusPayment: PaymentStatus;
-  deadline: string;
-  products: { name: string; qty: number; price: number }[];
-}
-
-const orders: Order[] = [
-  {
-    id: "ORD001",
-    customer: "Budi Santoso",
-    contact: "081234567890",
-    date: "2024-06-01",
-    total: 1500000,
-    statusOrder: "Pending",
-    statusPayment: "Belum Bayar",
-    deadline: "2024-09-01",
-    products: [
-      { name: "Pensil", qty: 10, price: 2000 },
-      { name: "Penghapus", qty: 5, price: 3000 },
-    ],
-  },
-  {
-    id: "ORD002",
-    customer: "Siti Aminah",
-    contact: "081234567891",
-    date: "2024-05-15",
-    total: 2500000,
-    statusOrder: "Dikonfirmasi",
-    statusPayment: "Sebagian",
-    deadline: "2024-08-15",
-    products: [
-      { name: "Buku", qty: 20, price: 15000 },
-      { name: "Pulpen", qty: 10, price: 5000 },
-    ],
-  },
-  {
-    id: "ORD003",
-    customer: "Andi Wijaya",
-    contact: "081234567892",
-    date: "2024-04-20",
-    total: 500000,
-    statusOrder: "Selesai",
-    statusPayment: "Lunas",
-    deadline: "2024-07-20",
-    products: [
-      { name: "Stapler", qty: 2, price: 25000 },
-      { name: "Kertas A4", qty: 5, price: 50000 },
-    ],
-  },
-];
-
-function formatRupiah(amount: number): string {
-  return "Rp " + amount.toLocaleString("id-ID");
-}
+import styles from "../../styles/pos.module.css"
+import { Order, OrderStatus, PaymentStatus } from "@/app/entities/order";
+import { products } from "@/app/api/products/product-mock";
+import { Product } from "@/app/entities/product";
+import { formatRupiah } from "@/app/lib/utils";
 
 const statusOrderColor: Record<OrderStatus, string> = {
   Pending: "warning",
@@ -81,6 +22,48 @@ const statusPaymentColor: Record<PaymentStatus, string> = {
 };
 
 const OrderList: React.FC = () => {
+
+  const [dataOrders, setDataOrders] = React.useState<Order[]>([]);
+
+  const fetchOrders =async () => {
+    try {
+      const response = await fetch("/api/orders");
+      if (!response.ok) {
+        throw new Error("Failed to fetch orders");
+      }
+      const data: Order[] = await response.json();
+      setDataOrders(data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setDataOrders([]);
+    }
+  };
+
+  useEffect(() => { 
+    // Simulate fetching data from an API
+    fetchOrders();
+  }, []);
+
+  //get list of products from order.producs that include productId. try finde from products
+  const getOrderProducts = (order: Order) : {products:Product,qty:number}[] => {
+    const orderProductsMap: { products: Product; qty: number }[] = [];
+    if (!order.products || order.products.length === 0) {
+      return [];
+    }
+    order.products.forEach((product) => {
+      const foundProduct = products.find((p) => p.id === product.productId);
+      if (foundProduct) {
+        orderProductsMap.push({
+          products: foundProduct,
+          qty: product.qty,
+        })
+      }
+    });
+
+    return orderProductsMap;
+  };
+
+
   const handlePrintInvoice = (order: Order) => {
     const invoiceContent = `
       Invoice
@@ -89,11 +72,11 @@ const OrderList: React.FC = () => {
       Contact: ${order.contact}
       Order ID: ${order.id}
       Products:
-      ${order.products
+      ${getOrderProducts(order)
         .map(
           (product) =>
-            `- ${product.name} (Qty: ${product.qty}, Price: ${formatRupiah(
-              product.price
+            `- ${product.products.name} (Qty: ${product.qty}, Price: ${formatRupiah(
+              product.products.price
             )})`
         )
         .join("\n")}
@@ -112,57 +95,103 @@ const OrderList: React.FC = () => {
       Order ID: ${order.id}
       Delivery Date: ${order.date}
       Products:
-      ${order.products
-        .map((product) => `- ${product.name} (Qty: ${product.qty})`)
+      ${getOrderProducts(order)
+        .map((product) => `- ${product.products.name} (Qty: ${product.qty})`)
         .join("\n")}
     `;
     console.log(suratJalanContent); // Replace with actual print logic
   };
 
+   async function deleteData(orderId:string){
+    await fetch(`/api/orders/${orderId}`, {
+      method: 'DELETE'
+    }).then(() => {
+          fetchOrders()
+        })
+        .catch((error) => {
+          console.error('Error fetching order:', error);
+        });
+      }
+  
+
   return (
-    <div className="fullscreen-container">
-      <h2 className="table-title">List Order</h2>
-      <Table striped bordered hover className="fullscreen-table">
+    <div className={styles.fullscreenContainer}>
+      <h2 className={styles.tableTitle}>List Order</h2>
+     <Link 
+        className={styles.linkAddButton} 
+        href="/dashboard/order/form?mode=create">
+     <Button
+     className={styles.addButton} 
+        variant="primary"
+      >
+        Tambah Order
+      </Button>
+     </Link>
+      <Table striped bordered hover className={styles.fullscreenTable}>
         <thead>
           <tr>
             <th>ID Order</th>
-            <th>Nama Customer</th>
             <th>Tanggal Order</th>
-            <th>Total Order</th>
+            <th>Nama Customer</th>
+            <th>Contact</th>
+            <th>Daftar Produk</th>
+            <th>Jumlah Produk</th>
+            <th>Total Pembayaran</th>
             <th>Status Order</th>
             <th>Status Pembayaran</th>
             <th>Deadline Pembayaran</th>
+            <th>Tanggal Pengiriman</th>
+            <th>Alamat Pengiriman</th>
+            <th>Status Pengiriman</th>
+            <th>Catatan</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {dataOrders.map((order) => (
             <tr key={order.id} style={{ cursor: "pointer" }}>
               <td>
-                <Link href={`/order/${order.id}`}>{order.id}</Link>
+                <Link href={`/dashboard/order/${order.id}`}>{order.id}</Link>
               </td>
+              {/* format date to dd-MM-yyyy */}
+              <td>{new Date(order.date || 0).toLocaleDateString()}</td>
               <td>{order.customer}</td>
-              <td>{order.date}</td>
+              <td>{order.contact}</td>
+              <td>
+                <ul>
+                  {getOrderProducts(order).map((product, index) => (
+                    <li key={index}>
+                      {product.products.name} (Qty: {product.qty})
+                    </li>
+                  ))}
+                </ul>
+              </td>
+              <td>{order.products.length}</td>
               <td>{formatRupiah(order.total)}</td>
               <td>
                 <span
-                  className={`badge bg-${statusOrderColor[order.statusOrder]}`}
+                  className={`badge bg-${statusOrderColor[order.statusOrder || "Pending"]}`}
                 >
                   {order.statusOrder}
                 </span>
               </td>
               <td>
                 <span
-                  className={`badge bg-${statusPaymentColor[order.statusPayment]}`}
+                  className={`badge bg-${statusPaymentColor[order.statusPayment || "Belum Bayar"]}`}
                 >
                   {order.statusPayment}
                 </span>
               </td>
-              <td>{order.deadline}</td>
+              <td>{new Date(order.deadline || 0).toLocaleDateString()}</td>
+              <td>{new Date(order.deliveryDate || 0).toLocaleDateString()}</td>
+              <td>{order.deliveryAddress}</td>
+              <td>{order.statusOrder}</td>
+              <td>{order.note || '-'}</td>
               <td>
                 {order.statusOrder === "Dikonfirmasi" && (
                   <>
                     <Button
+                    className={styles.addButton}
                       variant="primary"
                       onClick={() => handlePrintSuratJalan(order)}
                       style={{ marginRight: "0.5rem" }}
@@ -170,6 +199,7 @@ const OrderList: React.FC = () => {
                       Cetak Surat Jalan
                     </Button>
                     <Button
+                    className={styles.addButton}
                       variant="success"
                       onClick={() => handlePrintInvoice(order)}
                     >
@@ -177,6 +207,28 @@ const OrderList: React.FC = () => {
                     </Button>
                   </>
                 )}
+                {/* add Update and Delete button */}
+                <Button
+                    className={styles.addButton}
+                  variant="warning"
+                  onClick={() => {
+                    window.location.href = `/dashboard/order/form?mode=update&id=${order.id}`;
+                  }}
+                  style={{ marginRight: "0.5rem" }}
+                >
+                  Update
+                </Button>
+                <Button
+                    className={styles.addButton}
+                  variant="danger"
+                  onClick={() => {
+                    if(order.id){
+                      deleteData(order.id)
+                    }
+                  }}
+                >
+                  Delete
+                </Button>
               </td>
             </tr>
           ))}
