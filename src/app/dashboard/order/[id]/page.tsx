@@ -1,7 +1,8 @@
 import React from "react";
+import { use } from 'react'
 
-const OrderDetailPage: React.FC<{ params: { id: string } }> = async ({ params }) => {
-  const { id } = await params; // Access the dynamic route parameter
+const OrderDetailPage: React.FC<{ params: Promise<{ id: string }> }> = ({ params }) => {
+  const { id } = use(params); // Access the dynamic route parameter
 
   return (
     <div style={{ padding: "2rem" }}>

@@ -18,6 +18,7 @@ import {
   Typography,
   Input,
 } from "@mui/material";
+import { formatRupiah } from "@/app/lib/utils";
 
 const initialPiutang = [
   {
@@ -51,32 +52,28 @@ const initialHutang = [
   },
 ];
 
-function formatRupiah(num) {
-  return "Rp " + num.toLocaleString("id-ID");
-}
-
 export default function PaymentPage() {
   const [piutang, setPiutang] = useState(initialPiutang);
   const [hutang, setHutang] = useState(initialHutang);
   const [open, setOpen] = useState(false);
   const [formType, setFormType] = useState(""); // "piutang" atau "hutang"
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState<number>(0);
   const [jumlah, setJumlah] = useState("");
-  const [bukti, setBukti] = useState(null);
+  // const [bukti, setBukti] = useState(null);
 
-  const handleOpen = (type, id) => {
+  const handleOpen = (type:string, id:number) => {
     setFormType(type);
     setSelectedId(id);
     setOpen(true);
     setJumlah("");
-    setBukti(null);
+    // setBukti(null);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formType === "piutang") {
       setPiutang((prev) =>
@@ -203,7 +200,6 @@ export default function PaymentPage() {
               />
               <Input
                 type="file"
-                onChange={(e) => setBukti(e.target.files[0])}
                 required
                 fullWidth
               />

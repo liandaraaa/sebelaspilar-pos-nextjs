@@ -5,6 +5,14 @@ import {
   Paper, Button, Typography, Box
 } from '@mui/material';
 
+type Stock = {
+  id: number;
+  nama: string;
+  stock: number;
+  hargaBeli: number;
+  supplier: string;
+}
+
 const initialStock = [
   { id: 1, nama: 'Produk A', stock: 10, hargaBeli: 50000, supplier: 'Supplier X' },
   { id: 2, nama: 'Produk B', stock: 0, hargaBeli: 75000, supplier: 'Supplier Y' },
@@ -12,14 +20,14 @@ const initialStock = [
 ];
 
 function StockPage() {
-  const [stockList, setStockList] = useState(initialStock);
+  const [stockList] = useState(initialStock);
 
   const handleAddStock = () => {
     // Implementasi logika tambah stock baru
     alert('Fitur tambah stock baru');
   };
 
-  const handleBuyFromSupplier = (produk) => {
+  const handleBuyFromSupplier = (produk:Stock) => {
     // Implementasi logika beli dari supplier
     alert(`Beli ${produk.nama} dari ${produk.supplier}`);
   };

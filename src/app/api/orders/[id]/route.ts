@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { orders } from "../order-mock";
-export async function GET(request: NextRequest, { params }: { params: { id: string } })  {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+){
   const { id } = await params;
   const order = orders.find((o) => o.id === id);
 
@@ -12,7 +15,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   const { id } = await params;
   const orderIndex = orders.findIndex((o) => o.id === id);
 
@@ -38,12 +44,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     orders[orderIndex] = item;
     return NextResponse.json(item);
-  } catch (e) {
-    return NextResponse.json({ message: 'Invalid request body' }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ message: `Invalid request body because ${error}` }, { status: 400 });
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   const { id } = await params;
   const orderIndex = orders.findIndex((o) => o.id === id);
 
@@ -55,5 +64,3 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
   return new NextResponse(null, { status: 204 }); // 204 No Content
 }
-
-

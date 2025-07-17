@@ -17,7 +17,6 @@ import {
   Divider,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 // Komponen Kelola Data Karyawan
@@ -63,26 +62,21 @@ const EmployeeManagement = () => {
         </List>
         <Divider sx={{ my: 2 }} />
         <Grid container spacing={2}>
-          <Grid item xs={5}>
-            <TextField
+        <TextField
               label="Nama Karyawan"
               value={newEmployee.name}
               onChange={e => setNewEmployee({ ...newEmployee, name: e.target.value })}
               size="small"
               fullWidth
             />
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
+        <TextField
               label="Pembagian Profit (%)"
               value={newEmployee.profitShare}
               onChange={e => setNewEmployee({ ...newEmployee, profitShare: e.target.value })}
               size="small"
               fullWidth
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAdd}
@@ -90,7 +84,6 @@ const EmployeeManagement = () => {
             >
               Tambah
             </Button>
-          </Grid>
         </Grid>
       </CardContent>
     </Card>
@@ -134,17 +127,14 @@ const SupplierConfig = () => {
         </List>
         <Divider sx={{ my: 2 }} />
         <Grid container spacing={2}>
-          <Grid item xs={10}>
-            <TextField
+        <TextField
               label="Nama Supplier"
               value={newSupplier}
               onChange={e => setNewSupplier(e.target.value)}
               size="small"
               fullWidth
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+          <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAdd}
@@ -152,7 +142,6 @@ const SupplierConfig = () => {
             >
               Tambah
             </Button>
-          </Grid>
         </Grid>
       </CardContent>
     </Card>
@@ -196,17 +185,14 @@ const ThirdPartyConfig = () => {
         </List>
         <Divider sx={{ my: 2 }} />
         <Grid container spacing={2}>
-          <Grid item xs={10}>
-            <TextField
+        <TextField
               label="Nama Pihak Ketiga"
               value={newThirdParty}
               onChange={e => setNewThirdParty(e.target.value)}
               size="small"
               fullWidth
             />
-          </Grid>
-          <Grid item xs={2}>
-            <Button
+           <Button
               variant="contained"
               startIcon={<AddIcon />}
               onClick={handleAdd}
@@ -214,7 +200,6 @@ const ThirdPartyConfig = () => {
             >
               Tambah
             </Button>
-          </Grid>
         </Grid>
       </CardContent>
     </Card>
@@ -244,8 +229,7 @@ const UserAccountSettings = () => {
       <CardHeader title="Pengaturan Akun Pengguna" />
       <CardContent>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
+        <TextField
               label="Nama"
               name="name"
               value={user.name}
@@ -253,9 +237,7 @@ const UserAccountSettings = () => {
               fullWidth
               size="small"
             />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
+          <TextField
               label="Email"
               name="email"
               value={user.email}
@@ -263,9 +245,7 @@ const UserAccountSettings = () => {
               fullWidth
               size="small"
             />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
+          <TextField
               label="Password Baru"
               name="password"
               type="password"
@@ -274,12 +254,9 @@ const UserAccountSettings = () => {
               fullWidth
               size="small"
             />
-          </Grid>
-          <Grid item xs={12} sm={6} alignSelf="center">
-            <Button variant="contained" onClick={handleSave}>
+          <Button variant="contained" onClick={handleSave}>
               Simpan
             </Button>
-          </Grid>
         </Grid>
       </CardContent>
     </Card>

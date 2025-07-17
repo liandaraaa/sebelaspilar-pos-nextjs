@@ -1,5 +1,4 @@
 'use client';
-import React, { useRef } from "react";
 import {
   Box,
   Button,
@@ -10,9 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
-import { useReactToPrint } from "react-to-print";
+import { ChangeEvent, useState } from "react";
 
-const ReportSummary = ({ title, value }) => (
+interface ReportSummaryProps {
+  title:string,
+  value:string
+}
+
+const ReportSummary = ({ title, value }:ReportSummaryProps) => (
   <Card>
     <CardContent>
       <Typography variant="h6" gutterBottom>
@@ -26,12 +30,12 @@ const ReportSummary = ({ title, value }) => (
 );
 
 const LaporanPage = () => {
-  const [periode, setPeriode] = React.useState({
+  const [periode, setPeriode] = useState({
     dari: "",
     sampai: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setPeriode({
       ...periode,
       [e.target.name]: e.target.value,
@@ -46,13 +50,6 @@ const LaporanPage = () => {
     hutang: "Rp 1.000.000",
   };
 
-  const printRef = useRef();
-
-  const handlePrint = useReactToPrint({
-    content: () => printRef.current,
-    documentTitle: "Laporan-Keuangan",
-  });
-
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" gutterBottom>
@@ -61,8 +58,7 @@ const LaporanPage = () => {
       {/* Filter Periode */}
       <Box sx={{ mb: 3 }}>
         <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <TextField
+        <TextField
               label="Dari"
               type="date"
               name="dari"
@@ -71,9 +67,7 @@ const LaporanPage = () => {
               InputLabelProps={{ shrink: true }}
               size="small"
             />
-          </Grid>
-          <Grid item>
-            <TextField
+         <TextField
               label="Sampai"
               type="date"
               name="sampai"
@@ -82,35 +76,23 @@ const LaporanPage = () => {
               InputLabelProps={{ shrink: true }}
               size="small"
             />
-          </Grid>
-          <Grid item>
-            <Button
+          <Button
               variant="contained"
               color="primary"
               startIcon={<PrintIcon />}
-              onClick={handlePrint}
             >
               Export PDF / Cetak
             </Button>
-          </Grid>
         </Grid>
       </Box>
 
       {/* Ringkasan Laporan */}
-      <Box ref={printRef}>
+      <Box>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
-            <ReportSummary title="Laporan Profit" value={laporan.profit} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <ReportSummary title="Laporan Arus Kas" value={laporan.arusKas} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <ReportSummary title="Laporan Piutang" value={laporan.piutang} />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <ReportSummary title="Laporan Hutang" value={laporan.hutang} />
-          </Grid>
+        <ReportSummary title="Laporan Profit" value={laporan.profit} />
+        <ReportSummary title="Laporan Arus Kas" value={laporan.arusKas} />
+        <ReportSummary title="Laporan Piutang" value={laporan.piutang} />
+        <ReportSummary title="Laporan Hutang" value={laporan.hutang} />
         </Grid>
       </Box>
     </Box>

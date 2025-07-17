@@ -133,40 +133,19 @@ const OrderList: React.FC = () => {
             <th>ID Order</th>
             <th>Tanggal Order</th>
             <th>Nama Customer</th>
-            <th>Contact</th>
-            <th>Daftar Produk</th>
-            <th>Jumlah Produk</th>
             <th>Total Pembayaran</th>
             <th>Status Order</th>
             <th>Status Pembayaran</th>
-            <th>Deadline Pembayaran</th>
-            <th>Tanggal Pengiriman</th>
-            <th>Alamat Pengiriman</th>
             <th>Status Pengiriman</th>
-            <th>Catatan</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {dataOrders.map((order) => (
             <tr key={order.id} style={{ cursor: "pointer" }}>
-              <td>
-                <Link href={`/dashboard/order/${order.id}`}>{order.id}</Link>
-              </td>
-              {/* format date to dd-MM-yyyy */}
+              <td>{order.id}</td>
               <td>{new Date(order.date || 0).toLocaleDateString()}</td>
               <td>{order.customer}</td>
-              <td>{order.contact}</td>
-              <td>
-                <ul>
-                  {getOrderProducts(order).map((product, index) => (
-                    <li key={index}>
-                      {product.products.name} (Qty: {product.qty})
-                    </li>
-                  ))}
-                </ul>
-              </td>
-              <td>{order.products.length}</td>
               <td>{formatRupiah(order.total)}</td>
               <td>
                 <span
@@ -182,19 +161,44 @@ const OrderList: React.FC = () => {
                   {order.statusPayment}
                 </span>
               </td>
-              <td>{new Date(order.deadline || 0).toLocaleDateString()}</td>
-              <td>{new Date(order.deliveryDate || 0).toLocaleDateString()}</td>
-              <td>{order.deliveryAddress}</td>
-              <td>{order.statusOrder}</td>
-              <td>{order.note || '-'}</td>
+              <td>{order.statusDelivery}</td>
               <td>
+                <Link
+                href={`/dashboard/order/${order.id}`}>
+                <Button
+                    className={styles.addButton}
+                  variant="warning"
+                >
+                  View
+                </Button>
+                </Link>
+                <Link
+                href={`/dashboard/order/form?mode=update&id=${order.id}`}>
+                <Button
+                    className={styles.addButton}
+                  variant="warning"
+                >
+                  Update
+                </Button>
+                </Link>
+                <Button
+                    className={styles.addButton}
+                  variant="danger"
+                  onClick={() => {
+                    if(order.id){
+                      deleteData(order.id)
+                    }
+                  }}
+                >
+                  Delete
+                </Button>
+
                 {order.statusOrder === "Dikonfirmasi" && (
                   <>
                     <Button
                     className={styles.addButton}
                       variant="primary"
                       onClick={() => handlePrintSuratJalan(order)}
-                      style={{ marginRight: "0.5rem" }}
                     >
                       Cetak Surat Jalan
                     </Button>
@@ -207,28 +211,6 @@ const OrderList: React.FC = () => {
                     </Button>
                   </>
                 )}
-                {/* add Update and Delete button */}
-                <Button
-                    className={styles.addButton}
-                  variant="warning"
-                  onClick={() => {
-                    window.location.href = `/dashboard/order/form?mode=update&id=${order.id}`;
-                  }}
-                  style={{ marginRight: "0.5rem" }}
-                >
-                  Update
-                </Button>
-                <Button
-                    className={styles.addButton}
-                  variant="danger"
-                  onClick={() => {
-                    if(order.id){
-                      deleteData(order.id)
-                    }
-                  }}
-                >
-                  Delete
-                </Button>
               </td>
             </tr>
           ))}

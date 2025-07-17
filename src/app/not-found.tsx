@@ -1,5 +1,6 @@
 'use client';
 
+import Link from "next/link";
 import React from "react";
 
 const NotFoundPage: React.FC = () => {
@@ -47,23 +48,22 @@ const NotFoundPage: React.FC = () => {
           Mungkin sudah dipindahkan atau tautannya salah.<br />
           Jangan khawatir, Anda bisa kembali ke halaman utama.
         </p>
-        <a
-          href="/"
-          style={{
-            display: "inline-block",
-            padding: "10px 24px",
-            background: "#2b6cb0",
-            color: "#fff",
-            borderRadius: 8,
-            textDecoration: "none",
-            fontWeight: 500,
-            transition: "background 0.2s"
-          }}
-          onMouseOver={e => (e.currentTarget.style.background = "#205080")}
-          onMouseOut={e => (e.currentTarget.style.background = "#2b6cb0")}
-        >
-          Kembali ke Beranda
-        </a>
+        <Link 
+        href="/" 
+        style={{
+          display: "inline-block",
+          padding: "10px 24px",
+          background: "#2b6cb0",
+          color: "#fff",
+          borderRadius: 8,
+          textDecoration: "none",
+          fontWeight: 500,
+          transition: "background 0.2s"
+        }}
+        onMouseOver={e => (e.currentTarget.style.background = "#205080")}
+        onMouseOut={e => (e.currentTarget.style.background = "#2b6cb0")}>
+        Kembali Ke Beranda
+          </Link>
         {/* Animasi keyframes */}
         <style>
           {`

@@ -1,29 +1,59 @@
-:root {
-  --primary-color: #1a237e; /* Adjust based on logo */
-  --secondary-color: #25D366; /* WhatsApp green */
-  --background-color: #ffffff;
-  --text-color: #000000;
-  --footer-color: #000000;
-}
 
 .container {
   margin: 2rem auto;
   padding: 2rem;
 }
-
-.body {
-  font-family: 'Arial', sans-serif;
-  color: var(--text-color);
-  background-color: var(--background-color);
-  margin: 0;
-  padding: 16px;
-}
-
 .header {
   background-color: var(--primary-color);
   color: #fff;
   padding: 2rem 0;
   text-align: center;
+}
+
+.layout {
+  display: flex;
+  height: 100vh; /* Equivalent to h-screen */
+  flex-direction: column;
+  overflow: hidden; /* Prevent content overflow on small screens */
+}
+
+@media (min-width: 768px) {
+  .layout {
+    flex-direction: row; /* Equivalent to md:flex-row */
+    overflow: hidden; /* Equivalent to md:overflow-hidden */
+  }
+}
+
+.sidenavContainer {
+  width: 100%; /* Equivalent to w-full */
+  flex: none; /* Equivalent to flex-none */
+}
+
+@media (min-width: 768px) {
+  .sidenavContainer {
+    width: 16rem; /* Equivalent to md:w-64 */
+    height: 100vh; /* Ensure sidenav takes full height */
+  }
+}
+
+.content {
+  width: 100%;
+  flex: 1 1 0%;
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: 3rem; /* Equivalent to md:p-12 */
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: 3rem; /* Equivalent to md:p-12 */
+  }
 }
 
 .nav {
@@ -148,7 +178,7 @@
 }
 
 .addButton {
-  margin-bottom: 1rem;
+  margin: 0.2rem;
   background-color: var(--secondary-color); /* Use secondary color from :root */
   color: #fff;
   padding: 0.75rem 1.5rem;
