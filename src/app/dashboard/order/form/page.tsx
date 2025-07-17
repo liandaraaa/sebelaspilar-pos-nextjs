@@ -5,12 +5,17 @@ import { Order } from "@/app/entities/order";
 import { formatRupiah } from "@/app/lib/utils";
 import styles from "@/app/styles/pos.module.css";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 const FormOrderPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FormContent />
+    </Suspense>
+  );
+};
 
-  const [order, setOrder] = useState<Order>()
-
+const FormContent = () => {
   const [selectedProducts, setSelectedProducts] = useState<
     { productId: string; qty: number }[]
   >([]);
@@ -131,49 +136,49 @@ const FormOrderPage = () => {
       console.error("Error:", error);
     });
   }
-
+  const [order, setOrder] = useState<Order>()
   return (
-    <div className={styles.fullscreenContainer}>
-      <h2 className={styles.tableTitle}>Create Order</h2>
-      <form 
-      className={styles.orderForm}
-      onSubmit={handleSubmitForm}>
-        {/* Customer Information */}
-        <div className={styles.formGroup}>
-          <label htmlFor="customer">Customer Name</label>
-          <input type="text" id="customer" name="customer" required defaultValue={order?.customer}/>
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="contact">Contact</label>
-          <input type="text" id="contact" name="contact" required defaultValue={order?.contact}/>
-        </div>
+      <div className={styles.fullscreenContainer}>
+        <h2 className={styles.tableTitle}>Create Order</h2>
+        <form
+          className={styles.orderForm}
+          onSubmit={handleSubmitForm}>
+          {/* Customer Information */}
+          <div className={styles.formGroup}>
+            <label htmlFor="customer">Customer Name</label>
+            <input type="text" id="customer" name="customer" required defaultValue={order?.customer} />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="contact">Contact</label>
+            <input type="text" id="contact" name="contact" required defaultValue={order?.contact} />
+          </div>
 
-        {/* Product Selection */}
-        <div className={styles.formGroup}>
-          <label htmlFor="products">Products</label>
-          <select
-            id="products"
-            name="products"
-            multiple
-            required
-            onChange={handleProductChange}
-            defaultValue={order?.products?.map((product) => product.productId)}
-            value={selectedProducts?.map((product) => product.productId)}
-          >
-            {products.map((product) => (
-              <option 
-              key={product.id} 
-              value={product.id}
-              style={{
-                //set background color for selected option already in selectedProducts
-                backgroundColor: selectedProducts?.some((selectedProduct) => selectedProduct.productId === product.id) ?
-                'red' : 'white' 
-              }}>
-                {`${product.name} | Stock: ${product.stock} | Harga : ${formatRupiah(product.price)}`}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Product Selection */}
+          <div className={styles.formGroup}>
+            <label htmlFor="products">Products</label>
+            <select
+              id="products"
+              name="products"
+              multiple
+              required
+              onChange={handleProductChange}
+              defaultValue={order?.products?.map((product) => product.productId)}
+              value={selectedProducts?.map((product) => product.productId)}
+            >
+              {products.map((product) => (
+                <option
+                  key={product.id}
+                  value={product.id}
+                  style={{
+                    //set background color for selected option already in selectedProducts
+                    backgroundColor: selectedProducts?.some((selectedProduct) => selectedProduct.productId === product.id) ?
+                      'red' : 'white'
+                  }}>
+                  {`${product.name} | Stock: ${product.stock} | Harga : ${formatRupiah(product.price)}`}
+                </option>
+              ))}
+            </select>
+          </div>
 
         {/* Selected Products and Quantity */}
         {selectedProducts?.length > 0 && (
@@ -190,40 +195,40 @@ const FormOrderPage = () => {
                         type="number"
                         defaultValue={selectedProduct.qty}
                         onChange={(e) => updateQuantity(selectedProduct.productId, Number(e.target.value))}
-                      />
+                        />
                       <label>Total Harga : {formatRupiah(product.price * selectedProduct.qty)}</label>
                     </li>
                   )
                 );
               })}
             </ul>
-          </div>
-        )}
-        <div className={styles.formGroup}>
-          <label htmlFor="total">Total</label>
-          <input type="text" id="total" name="total" required readOnly
-          value={formatRupiah(calculateTotalOrder())} />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="deliveryDate">Delivery Date</label>
-          <input type="date" id="deliveryDate" name="deliveryDate" required defaultValue={order?.deliveryDate} />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="deliveryAddress">Delivery Address</label>
-          <textarea id="deliveryAddress" name="deliveryAddress" rows={4} required defaultValue={order?.deliveryAddress}></textarea>
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="note">Note</label>
-          <textarea id="note" name="note" rows={4} defaultValue={order?.note || '-'}></textarea>
-        </div>
-        <button type="submit"
-        >
+              </div>
+              )}
+              <div className={styles.formGroup}>
+                <label htmlFor="total">Total</label>
+                <input type="text" id="total" name="total" required readOnly
+                  value={formatRupiah(calculateTotalOrder())} />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="deliveryDate">Delivery Date</label>
+                <input type="date" id="deliveryDate" name="deliveryDate" required defaultValue={order?.deliveryDate} />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="deliveryAddress">Delivery Address</label>
+                <textarea id="deliveryAddress" name="deliveryAddress" rows={4} required defaultValue={order?.deliveryAddress}></textarea>
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="note">Note</label>
+                <textarea id="note" name="note" rows={4} defaultValue={order?.note || '-'}></textarea>
+              </div>
+              <button type="submit"
+              >
           {
             isUpdateMode ? 'Update Order' : 'Create Order'
           }
         </button> 
       </form>
-    </div>
+      </div>
   );
 }
 export default FormOrderPage;
