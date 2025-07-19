@@ -37,4 +37,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Testing The App
 
-You need to create .env file in the root of the project before run the app. This app using Neon PostgresSql as a database. Ensure you have variable DATABASE_URL in your .env file and execute  [http://localhost:3000/seed](http://localhost:3000) to create initial data
+You need to create .env file in the root of the project before run the app. This app using Neon PostgresSql as a database. Ensure you have variable DATABASE_URL in your .env file and uncomment code in app/seed/route.ts.
+
+Run the file [http://localhost:3000/seed](http://localhost:3000) to create initial data

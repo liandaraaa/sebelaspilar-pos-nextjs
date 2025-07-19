@@ -6,7 +6,7 @@ import { orders as mockOrders } from '../api/orders/order-mock';
 
 const sql = neon(`${process.env.DATABASE_URL}`);
 
-export async function seedOrders() {
+async function seedOrders() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await sql`
     CREATE TABLE IF NOT EXISTS orders (
