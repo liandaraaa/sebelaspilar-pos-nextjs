@@ -3,7 +3,8 @@
 import { products } from "@/app/api/products/product-mock";
 import { Order } from "@/app/entities/order";
 import { formatRupiah } from "@/app/lib/utils";
-import styles from "@/app/styles/pos.module.css";
+import styles from "../detail.module.css";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
 
@@ -16,6 +17,9 @@ const FormOrderPage = () => {
 };
 
 const FormContent = () => {
+
+  const [order, setOrder] = useState<Order>()
+
   const [selectedProducts, setSelectedProducts] = useState<
     { productId: string; qty: number }[]
   >([]);
@@ -26,7 +30,6 @@ const FormContent = () => {
   const orderId = searchParams.get('id'); // ID order jika mode adalah 'update'
   const isUpdateMode = mode === 'update';
 
-  // if isUpdateMode and orderId not null, fetch order by id
   useEffect(() => {
     if (isUpdateMode && orderId) {
       fetch(`/api/orders/${orderId}`)
@@ -65,10 +68,10 @@ const FormContent = () => {
     ] );
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, qty: number) => {
     setSelectedProducts((prev) =>
       prev.map((product) =>
-        product.productId === productId ? { ...product, quantity } : product
+        product.productId === productId ? { ...product, qty } : product
       )
     );
   };
@@ -85,7 +88,6 @@ const FormContent = () => {
 
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {  
     event.preventDefault();
-    console.log('cek selected products', selectedProducts)
     const formData = new FormData(event.currentTarget);
     const orderData:Order = {
       customer: formData.get("customer") as string,
@@ -136,14 +138,18 @@ const FormContent = () => {
       console.error("Error:", error);
     });
   }
-  const [order, setOrder] = useState<Order>()
+
   return (
-      <div className={styles.fullscreenContainer}>
-        <h2 className={styles.tableTitle}>Create Order</h2>
+      <div className={styles.container}>
+          <header className={styles.header}>
+        <h1 className={styles.title}>{isUpdateMode ? 'Update Order' : 'Create Order'}</h1>
+        <Link href="/dashboard/order" className={styles.backLink}>
+          Back to Orders
+        </Link>
+      </header>
         <form
           className={styles.orderForm}
           onSubmit={handleSubmitForm}>
-          {/* Customer Information */}
           <div className={styles.formGroup}>
             <label htmlFor="customer">Customer Name</label>
             <input type="text" id="customer" name="customer" required defaultValue={order?.customer} />
@@ -153,7 +159,6 @@ const FormContent = () => {
             <input type="text" id="contact" name="contact" required defaultValue={order?.contact} />
           </div>
 
-          {/* Product Selection */}
           <div className={styles.formGroup}>
             <label htmlFor="products">Products</label>
             <select
@@ -170,7 +175,6 @@ const FormContent = () => {
                   key={product.id}
                   value={product.id}
                   style={{
-                    //set background color for selected option already in selectedProducts
                     backgroundColor: selectedProducts?.some((selectedProduct) => selectedProduct.productId === product.id) ?
                       'red' : 'white'
                   }}>
@@ -179,8 +183,6 @@ const FormContent = () => {
               ))}
             </select>
           </div>
-
-        {/* Selected Products and Quantity */}
         {selectedProducts?.length > 0 && (
           <div className={styles.formGroup}>
             <label>Selected Products</label>
@@ -211,7 +213,7 @@ const FormContent = () => {
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="deliveryDate">Delivery Date</label>
-                <input type="date" id="deliveryDate" name="deliveryDate" required defaultValue={order?.deliveryDate} />
+                <input type="date" id="deliveryDate" name="deliveryDate" required defaultValue={order?.deliveryDate ? new Date(order.deliveryDate).toISOString().split('T')[0] : ''} />
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="deliveryAddress">Delivery Address</label>
@@ -219,7 +221,7 @@ const FormContent = () => {
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="note">Note</label>
-                <textarea id="note" name="note" rows={4} defaultValue={order?.note || '-'}></textarea>
+                <textarea id="note" name="note" rows={4} defaultValue={order?.note}></textarea>
               </div>
               <button type="submit"
               >

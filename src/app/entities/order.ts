@@ -2,6 +2,10 @@ export type OrderStatus = "Pending" | "Dikonfirmasi" | "Selesai";
 export type PaymentStatus = "Belum Bayar" | "Sebagian" | "Lunas";
 export type DeliveryStatus = "Belum Dikirim" | "Sedang Dikirim" | "Selesai";
 
+type SelectedProduct = {
+  productId: string;
+  qty: number;
+}
 
 export interface Order {
   id?: string;
@@ -12,7 +16,7 @@ export interface Order {
   statusOrder?: OrderStatus;
   statusPayment?: PaymentStatus;
   deadline?: string;
-  products: { productId: string; qty: number}[];
+  products: SelectedProduct[];
   deliveryDate: string;
   deliveryAddress: string;
   statusDelivery?: string;
