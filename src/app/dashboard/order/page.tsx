@@ -8,6 +8,9 @@ import { Order, OrderStatus, PaymentStatus } from "@/app/entities/order";
 import { products } from "@/app/api/products/product-mock";
 import { Product } from "@/app/entities/product";
 import { formatRupiah } from "@/app/lib/utils";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/app/lib/store";
+import { setStatus } from "@/app/lib/features/ordersSlice";
 
 const statusOrderColor: Record<OrderStatus, string> = {
   Pending: "warning",
@@ -22,27 +25,15 @@ const statusPaymentColor: Record<PaymentStatus, string> = {
 };
 
 const OrderList: React.FC = () => {
-
+  const {status, orders} = useSelector((state: RootState) => state.orders);
+  const dispatch = useDispatch<AppDispatch>()
   const [dataOrders, setDataOrders] = React.useState<Order[]>([]);
 
-  const fetchOrders =async () => {
-    try {
-      const response = await fetch("/api/orders");
-      if (!response.ok) {
-        throw new Error("Failed to fetch orders");
-      }
-      const data: Order[] = await response.json();
-      setDataOrders(data);
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      setDataOrders([]);
-    }
-  };
-
   useEffect(() => { 
-    // Simulate fetching data from an API
-    fetchOrders();
-  }, []);
+    if(status === 'succeeded'){
+      setDataOrders(orders);
+    }
+  }, [status,orders]);
 
   //get list of products from order.producs that include productId. try finde from products
   const getOrderProducts = (order: Order) : {products:Product,qty:number}[] => {
@@ -106,7 +97,7 @@ const OrderList: React.FC = () => {
     await fetch(`/api/orders/${orderId}`, {
       method: 'DELETE'
     }).then(() => {
-          fetchOrders()
+        dispatch(setStatus('idle'))
         })
         .catch((error) => {
           console.error('Error fetching order:', error);

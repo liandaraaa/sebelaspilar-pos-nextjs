@@ -1,20 +1,36 @@
 'use client';
 
+import { Badge } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/lib/store';
 
-const navItems = [
+type NavItem = {
+  href: string;
+  label: string;
+  icon?: string;
+  badgeCount?: number;
+}
+
+const navItems:NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
-  { href: '/dashboard/order', label: 'Order Management', icon: '📋' },
+  { href: '/dashboard/order', label: 'Order Management', icon: '📋'},
   { href: '/dashboard/stock', label: 'Stock Management', icon: '📦' },
   { href: '/dashboard/payment', label: 'Payment Management', icon: '💳' },
   { href: '/dashboard/report', label: 'Report', icon: '📊' },
   { href: '/dashboard/settings', label: 'Settings', icon: '⚙️' },
-  { href: '/dashboard/signout', label: 'Sign Out', icon: '🚪' },
+  { href: '/', label: 'Sign Out', icon: '🚪' },
 ];
 
 export default function Header() {
   const pathname = usePathname();
+
+  const badgeCount = useSelector((state: RootState) => state.counter.value);
+  const orderMenu = navItems.find((item) => item.href === '/dashboard/order');
+  if(orderMenu){
+    orderMenu.badgeCount = badgeCount;
+  }
 
   return (
     <nav>
@@ -23,6 +39,7 @@ export default function Header() {
             const LinkIcon = item.icon ? <span style={{ marginRight: '0.5rem' }}>{item.icon}</span> : null;
             return  (
               <li key={item.href}>
+                <div>
                 <Link
                   href={item.href}
                   style={{
@@ -39,6 +56,8 @@ export default function Header() {
                   }
                   {item.label}
                 </Link>
+                {item.badgeCount && <Badge badgeContent={item.badgeCount} color="error" />}
+                </div>
               </li>
             )
           })}

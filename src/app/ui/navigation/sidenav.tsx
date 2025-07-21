@@ -11,7 +11,11 @@ export default function SideNav() {
             src="/logo-sebelaspilar.jpeg"
             alt="Logo Sebelas Pilar"
             width={64}
-            height={64}/>
+            height={64}
+            style={{
+              width:'auto',
+              height:'auto'
+            }}/>
       </Link>
       <div className={styles.navContainer}>
         <NavLinks />
