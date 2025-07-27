@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/lib/store';
+import { signOut } from 'next-auth/react';
 
 type NavItem = {
   href: string;
@@ -49,6 +50,11 @@ export default function Header() {
                     padding: '1rem',
                     borderRadius: '4px',
                     transition: 'background-color 0.3s ease',
+                  }}
+                  onClick={()=>{
+                    if(item.href === '/'){
+                      signOut({callbackUrl: '/auth/login'})
+                    }
                   }}
                 >
                   {

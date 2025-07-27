@@ -1,0 +1,28 @@
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userProfile span {
+  font-weight: 500;
+  color: #374151;
+}
+
+.skeleton {
+  width: 100px;
+  height: 24px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+

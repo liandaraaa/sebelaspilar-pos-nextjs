@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 const navItems = [
   { href: '#why-choose-us', label: 'Why Choose Us?' },
   { href: '#contact', label: 'Contact Us' },
-  { href: '/dashboard', label: 'Login' },
+  { href: '/auth/login', label: 'Login' },
 ];
 
 export default function Header() {
