@@ -4,8 +4,6 @@ import styles from '../auth.module.css';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { it } from 'node:test';
-
 
 const LoginPage = () => {
 

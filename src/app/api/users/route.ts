@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET(){
   const users = await prisma.users.findMany({
     where: {
-      deleted_at: null
+      deletedAt: null
     }
   })
 
@@ -17,9 +17,9 @@ export async function GET(){
 
 export async function POST(request: NextRequest){
   const body = await request.json();
-  const { name, email } = body;
+  const { name, email, password } = body;
   const newUser = await prisma.users.create({
-    data: { name, email }
+    data: { name, email, password }
   })
   console.log(newUser, 24);
   return NextResponse.json(newUser, {
@@ -29,11 +29,11 @@ export async function POST(request: NextRequest){
 
 export async function PATCH(request: NextRequest){
   const body = await request.json();
-  const { id, name, email } = body;
+  const { id, name, email, password } = body;
 
   const updateUser = await prisma.users.update({
     where: { id },
-    data: { name, email }
+    data: { name, email, password }
   })
 
   return NextResponse.json(updateUser, {
@@ -47,7 +47,7 @@ export async function DELETE(request: NextRequest){
 
   const deleteUser = await prisma.users.update({
     where: { id },
-    data: { deleted_at: new Date() }
+    data: { deletedAt: new Date() }
   })
 
   return NextResponse.json(deleteUser, {
