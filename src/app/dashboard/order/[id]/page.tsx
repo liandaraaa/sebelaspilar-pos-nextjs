@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { formatRupiah, formatDate } from '@/app/lib/utils';
-import styles from '../detail.module.css';
+import styles from '../../dashboard.module.css';
 import { Order } from '@/app/entities/order';
 import { products } from '@/app/api/products/product-mock';
 

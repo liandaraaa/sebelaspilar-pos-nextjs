@@ -1,50 +1,58 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Button, Typography, Box
 } from '@mui/material';
-
-type Stock = {
-  id: number;
-  nama: string;
-  stock: number;
-  hargaBeli: number;
-  supplier: string;
-}
-
-const initialStock = [
-  { id: 1, nama: 'Produk A', stock: 10, hargaBeli: 50000, supplier: 'Supplier X' },
-  { id: 2, nama: 'Produk B', stock: 0, hargaBeli: 75000, supplier: 'Supplier Y' },
-  { id: 3, nama: 'Produk C', stock: 5, hargaBeli: 60000, supplier: 'Supplier Z' },
-];
+import { Product } from '@/app/entities/product';
+import Link from 'next/link';
+import styles from '../../styles/pos.module.css'
+import { formatRupiah } from '@/app/lib/utils';
 
 function StockPage() {
-  const [stockList] = useState(initialStock);
+  const [stockList, setStockList] = useState<Product[]>();
 
-  const handleAddStock = () => {
-    // Implementasi logika tambah stock baru
-    alert('Fitur tambah stock baru');
-  };
+  async function fetchProducts() {
+    fetch(`/api/products/`)
+    .then((response) => response.json())
+    .then((data) => {
+      setStockList(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching order:', error);
+    });
+  }
 
-  const handleBuyFromSupplier = (produk:Stock) => {
-    // Implementasi logika beli dari supplier
-    alert(`Beli ${produk.nama} dari ${produk.supplier}`);
-  };
+  useEffect(()=>{
+    fetchProducts()
+  },[])
+
+   async function deleteData(id:string){
+      await fetch(`/api/products/${id}`, {
+        method: 'DELETE'
+      }).then(() => {
+          fetchProducts()
+          })
+          .catch((error) => {
+            console.error('Error fetching order:', error);
+          });
+        }
+    
 
   return (
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
         Stock Barang
       </Typography>
-      <Button
+     <Link
+     href='/dashboard/stock/form'>
+     <Button
         variant="contained"
         color="primary"
-        onClick={handleAddStock}
         sx={{ mb: 2 }}
       >
         Tambah Stock Baru
-      </Button>
+      </Button></Link>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -52,23 +60,56 @@ function StockPage() {
               <TableCell>Nama Produk</TableCell>
               <TableCell>Stock Tersedia</TableCell>
               <TableCell>Harga Beli</TableCell>
+              <TableCell>Harga Jual</TableCell>
               <TableCell>Supplier</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Aksi</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {stockList.map((row) => (
+            {stockList?.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>{row.nama}</TableCell>
-                <TableCell>{row.stock}</TableCell>
-                <TableCell>Rp {row.hargaBeli.toLocaleString()}</TableCell>
+                <TableCell>{row?.name}</TableCell>
+                <TableCell>{row?.stock}</TableCell>
+                <TableCell>{formatRupiah(row.price)}</TableCell>
+                <TableCell>{formatRupiah(row.buyPrice)}</TableCell>
                 <TableCell>{row.supplier}</TableCell>
+                <TableCell>{row.status}</TableCell>
                 <TableCell>
+                <Link
+                href={`/dashboard/stock/${row.id}`}>
+                <Button
+                    className={styles.addButton}
+                  color='warning'
+                >
+                  View
+                </Button>
+                </Link>
+                <Link
+                href={`/dashboard/stock/form?mode=update&id=${row.id}`}>
+                <Button
+                    className={styles.addButton}
+                  color="warning"
+                >
+                  Update
+                </Button>
+                </Link>
+                <Button
+                    className={styles.addButton}
+                  color='error'
+                  onClick={() => {
+                    if(row.id){
+                      deleteData(row.id)
+                    }
+                  }}
+                >
+                  Delete
+                </Button>
                   {row.stock === 0 && (
                     <Button
                       variant="outlined"
                       color="secondary"
-                      onClick={() => handleBuyFromSupplier(row)}
+                      // onClick={() => handleBuyFromSupplier(row)}
                     >
                       Beli dari Supplier
                     </Button>

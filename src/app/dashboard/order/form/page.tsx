@@ -1,12 +1,13 @@
 'use client'
 
-import { products } from "@/app/api/products/product-mock";
 import { Order } from "@/app/entities/order";
 import { formatRupiah } from "@/app/lib/utils";
-import styles from "../detail.module.css";
+import detailStyles from "../../dashboard.module.css";
+import styles from "../../../styles/pos.module.css"
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
+import { Product } from "@/app/entities/product";
 
 const FormOrderPage = () => {
   return (
@@ -19,6 +20,7 @@ const FormOrderPage = () => {
 const FormContent = () => {
 
   const [order, setOrder] = useState<Order>()
+    const [products, setProducts] = useState<Product[]>();
 
   const [selectedProducts, setSelectedProducts] = useState<
     { productId: string; qty: number }[]
@@ -43,6 +45,17 @@ const FormContent = () => {
         });
     }   
   }, [isUpdateMode, orderId]);
+
+    useEffect(()=>{
+       fetch(`/api/products/`)
+              .then((response) => response.json())
+              .then((data) => {
+                setProducts(data);
+              })
+              .catch((error) => {
+                console.error('Error fetching order:', error);
+              });
+    },[])
 
   const handleProductChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(event.target.selectedOptions);
@@ -79,7 +92,7 @@ const FormContent = () => {
   const calculateTotalOrder = () => { 
     return selectedProducts?.reduce(
       (total, selectedProduct) => {
-        const product = products.find((p) => p.id === selectedProduct.productId);
+        const product = products?.find((p) => p.id === selectedProduct.productId);
         return product ? total + (product.price * selectedProduct.qty) : total;
       },
       0
@@ -140,10 +153,10 @@ const FormContent = () => {
   }
 
   return (
-      <div className={styles.container}>
-          <header className={styles.header}>
-        <h1 className={styles.title}>{isUpdateMode ? 'Update Order' : 'Create Order'}</h1>
-        <Link href="/dashboard/order" className={styles.backLink}>
+      <div className={detailStyles.container}>
+          <header className={detailStyles.header}>
+        <h1 className={detailStyles.title}>{isUpdateMode ? 'Update Order' : 'Create Order'}</h1>
+        <Link href="/dashboard/order" className={detailStyles.backLink}>
           Back to Orders
         </Link>
       </header>
@@ -170,7 +183,7 @@ const FormContent = () => {
               defaultValue={order?.products?.map((product) => product.productId)}
               value={selectedProducts?.map((product) => product.productId)}
             >
-              {products.map((product) => (
+              {products?.map((product) => (
                 <option
                   key={product.id}
                   value={product.id}
@@ -188,7 +201,7 @@ const FormContent = () => {
             <label>Selected Products</label>
             <ul>
               {selectedProducts?.map((selectedProduct) => {
-                const product = products.find((p) => p.id === selectedProduct.productId);
+                const product = products?.find((p) => p.id === selectedProduct.productId);
                 return (
                   product && (
                     <li key={selectedProduct.productId}>

@@ -1,4 +1,4 @@
-import { Product } from "@/app/entities/product";
+import { Product, ProductStatus } from "@/app/entities/product";
 
 export const products:Product[] = [
   {
@@ -11,6 +11,9 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-a.jpg",
     createdAt: new Date("2024-01-01"),
     updatedAt: new Date("2024-01-10"),
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   },
   {
     id: "PROD002",
@@ -22,6 +25,9 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-b.jpg",
     createdAt: new Date("2024-01-05"),
     updatedAt: new Date("2024-01-15"),
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   },
   {
     id: "PROD003",
@@ -33,6 +39,9 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-c.jpg",
     createdAt: new Date("2024-01-10"),
     updatedAt: new Date("2024-01-20"),
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   },
   {
     id: "PROD004",
@@ -44,6 +53,9 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-d.jpg",    
     createdAt: new Date("2024-01-15"),
     updatedAt: new Date("2024-01-25"),    
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   },
   {
     id: "PROD005",
@@ -55,6 +67,9 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-e.jpg",
     createdAt: new Date("2024-01-20"),
     updatedAt: new Date("2024-01-30"),
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   },
   {
     id: "PROD0016",
@@ -66,49 +81,8 @@ export const products:Product[] = [
     imageUrl: "https://example.com/images/prod-f.jpg",
     createdAt: new Date("2024-01-25"),
     updatedAt: new Date("2024-02-05"),
-  },
-  {
-    id: "PROD007",
-    name: "Produk G",
-    price: 22000,
-    description: "Deskripsi Produk G",
-    stock: 25,
-    category: "Kategori 3",
-    imageUrl: "https://example.com/images/prod-g.jpg",
-    createdAt: new Date("2024-01-30"),
-    updatedAt: new Date("2024-02-10"),
-  },
-  {
-    id: "PROD008",
-    name: "Produk H",
-    price: 12000,
-    description: "Deskripsi Produk H",
-    stock: 40,
-    category: "Kategori 2",
-    imageUrl: "https://example.com/images/prod-h.jpg",
-    createdAt: new Date("2024-02-05"),
-    updatedAt: new Date("2024-02-15"),
-  },
-  {
-    id: "PROD009",
-    name: "Produk I", 
-    price: 17000,
-    description: "Deskripsi Produk I",
-    stock: 35,
-    category: "Kategori 1",
-    imageUrl: "https://example.com/images/prod-i.jpg",
-    createdAt: new Date("2024-02-10"),    
-    updatedAt: new Date("2024-02-20"),
-  },
-  {
-    id: "PROD0010",
-    name: "Produk J",
-    price: 28000,
-    description: "Deskripsi Produk J",
-    stock: 8,
-    category: "Kategori 3",
-    imageUrl: "https://example.com/images/prod-j.jpg",
-    createdAt: new Date("2024-02-15"),
-    updatedAt: new Date("2024-02-25"),
+    buyPrice: 12000,
+    supplier: "PT Supplier 11",
+    status: ProductStatus.READY
   }
 ];

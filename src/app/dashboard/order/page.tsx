@@ -1,11 +1,10 @@
 'use client';
 
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import styles from "../../styles/pos.module.css"
 import { Order, OrderStatus, PaymentStatus } from "@/app/entities/order";
-import { products } from "@/app/api/products/product-mock";
 import { Product } from "@/app/entities/product";
 import { formatRupiah } from "@/app/lib/utils";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,13 +26,26 @@ const statusPaymentColor: Record<PaymentStatus, string> = {
 const OrderList: React.FC = () => {
   const {status, orders} = useSelector((state: RootState) => state.orders);
   const dispatch = useDispatch<AppDispatch>()
-  const [dataOrders, setDataOrders] = React.useState<Order[]>([]);
+  const [dataOrders, setDataOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<Product[]>();
 
   useEffect(() => { 
     if(status === 'succeeded'){
       setDataOrders(orders);
     }
   }, [status,orders]);
+
+  useEffect(()=>{
+     fetch(`/api/products/`)
+            .then((response) => response.json())
+            .then((data) => {
+              setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error fetching order:', error);
+            });
+  },[])
+
 
   //get list of products from order.producs that include productId. try finde from products
   const getOrderProducts = (order: Order) : {products:Product,qty:number}[] => {
@@ -42,7 +54,7 @@ const OrderList: React.FC = () => {
       return [];
     }
     order.products.forEach((product) => {
-      const foundProduct = products.find((p) => p.id === product.productId);
+      const foundProduct = products?.find((p) => p.id === product.productId);
       if (foundProduct) {
         orderProductsMap.push({
           products: foundProduct,
@@ -112,7 +124,7 @@ const OrderList: React.FC = () => {
         className={styles.linkAddButton} 
         href="/dashboard/order/form?mode=create">
      <Button
-     className={styles.addButton} 
+        className={styles.addButton} 
         variant="primary"
       >
         Tambah Order
@@ -128,7 +140,7 @@ const OrderList: React.FC = () => {
             <th>Status Order</th>
             <th>Status Pembayaran</th>
             <th>Status Pengiriman</th>
-            <th>Actions</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>

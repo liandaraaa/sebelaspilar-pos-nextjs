@@ -174,7 +174,7 @@
 }
 
 .linkAddButton{
-  align-self: flex-end;
+  align-self: center;
 }
 
 .addButton {
@@ -214,5 +214,160 @@
   pointer-events: none; /* Prevent any interaction */
 }
 .addButton:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+
+
+.form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.form h2 {
+  color: var(--primary-color); /* Use primary color from :root */
+}
+.form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color); /* Use text color from :root */
+}
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e7eb; /* Equivalent to border-gray-300 */
+  border-radius: 6px; /* Equivalent to rounded-md */
+  background-color: #f9fafb; /* Equivalent to bg        
+-gray-100 */
+  color: var(--text-color); /* Use text color from :root */
+}
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  border-color: var(--primary-color); /* Use primary color from :root */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(26, 358, 0.2); /* Focus ring */
+}
+.form button {
+  background-color: var(--secondary-color); /* Use secondary color from :root */
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px; /* Equivalent to rounded-md */
+  border: none;
+  cursor: pointer;          
+}
+.form button:hover {
+  background-color: #128C7E; /* Darker shade of WhatsApp green */
+}
+.form button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0.2); /* Focus ring */
+}
+.form button:active {
+  background-color: #075E54; /* Even darker shade for active state */
+}
+.form button:disabled {
+  background-color: #B2DFDB; /* Light grey for disabled state */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form button:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+.form button:disabled:focus {
+  box-shadow: none; /* No focus ring for disabled state */
+}
+.form button:disabled:active {
+  background-color: #B2DFDB; /* Maintain disabled state color on active */
+}
+.form button:disabled {
+  pointer-events: none; /* Prevent any interaction */
+}
+.form button:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+.form button:disabled {
+  pointer-events: none; /* Prevent any interaction */
+}
+.form button:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+ 
+
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color); /* Use text color from :root */
+}
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e7eb; /* Equivalent to border-gray-300 */
+  border-radius: 6px; /* Equivalent to rounded-md */    
+  background-color: #f9fafb; /* Equivalent to bg-gray-100 */
+  color: var(--text-color); /* Use text color from :root */
+}
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {   
+  border-color: var(--primary-color); /* Use primary color from :root */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.2); /* Focus ring */
+}
+.formGroup button {
+  background-color: var(--secondary-color); /* Use secondary color from :root */
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px; /* Equivalent to rounded-md */
+  border: none;
+  cursor: pointer;      
+}
+.formGroup button:hover {
+  background-color: #128C7E; /* Darker shade of WhatsApp green */
+}
+.formGroup button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0.2); /* Focus ring */
+}
+.formGroup button:active {
+  background-color: #075E54; /* Even darker shade for active state */
+}
+.formGroup button:disabled {
+  background-color: #B2DFDB; /* Light grey for disabled state */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.formGroup button:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+.formGroup button:disabled:focus {
+  box-shadow: none; /* No focus ring for disabled state */
+}
+.formGroup button:disabled:active {
+  background-color: #B2DFDB; /* Maintain disabled state color on active */
+}
+.formGroup button:disabled {
+  pointer-events: none; /* Prevent any interaction */
+} .formGroup button:disabled:hover {
+  background-color: #B2DFDB; /* Maintain disabled state color on hover */
+}
+.formGroup button:disabled {
+  pointer-events: none; /* Prevent any interaction */
+}
+.formGroup button:disabled:hover {
   background-color: #B2DFDB; /* Maintain disabled state color on hover */
 }

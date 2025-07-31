@@ -1,3 +1,9 @@
+
+export enum ProductStatus {
+  READY = "Ready",
+  RESTOCK = "Restock"
+}
+
 export type Product = {
   id?: string;
   name: string;
@@ -8,4 +14,7 @@ export type Product = {
   imageUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  buyPrice: number;
+  supplier: string;
+  status : ProductStatus;
 };
