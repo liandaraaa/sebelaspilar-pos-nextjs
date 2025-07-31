@@ -50,7 +50,7 @@ function ProductFormPage() {
     }   
   }, [isUpdateMode, productId]);
 
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<HTMLSelectElement|HTMLInputElement|HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     console.log('cek handle change', name, value)
     setProduct((prev) => ({
