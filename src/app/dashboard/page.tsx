@@ -1,6 +1,5 @@
 'use client';
-import React from 'react';
-import { Line } from 'react-chartjs-2';
+import React, {useState, useEffect} from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +10,9 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { Purchase } from '../entities/purchase';
+import { Receiveable } from '../entities/receiveable';
+import { Order } from '../entities/order';
 
 ChartJS.register(
   CategoryScale,
@@ -28,42 +30,70 @@ type SummaryItem = {
   color: string;
 };
 
-type Notification = {
-  type: string;
-  message: string;
-};
-
-const summaryData: SummaryItem[] = [
-  { label: 'Total Saldo Kas', value: 15000000, color: '#4caf50' },
-  { label: 'Total Piutang', value: 3500000, color: '#2196f3' },
-  { label: 'Total Hutang', value: 2000000, color: '#f44336' },
-  { label: 'Profit', value: 5000000, color: '#ff9800' },
-];
-
-const cashFlowData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-  datasets: [
-    {
-      label: 'Arus Kas',
-      data: [2000000, 2500000, 1800000, 3000000, 3500000, 4000000],
-      fill: false,
-      borderColor: '#4caf50',
-      backgroundColor: '#4caf50',
-      tension: 0.4,
-    },
-  ],
-};
-
-const notifications: Notification[] = [
-  { type: 'Order Pending', message: 'Order #12345 belum diproses.' },
-  { type: 'Jatuh Tempo', message: 'Customer B akan jatuh tempo dalam 3 hari.' },
-];
-
 const Dashboard: React.FC = () => {
+
+  const [summaryData, setSummaryData] = useState<SummaryItem[]>([]);
+
+  async function fetchOrders(): Promise<Order[]> {
+    return fetch(`/api/orders/`)
+      .then((response) => response.json())
+      .then((data: Order[]) => {
+        const orders = data.filter((item) => item.statusPayment === 'Lunas');
+        return orders;
+      })
+      .catch((error) => {
+        console.error('Error fetching order:', error);
+        return [];
+      });
+  }
+  
+  async function fetchDebts(): Promise<Purchase[]> {
+    return fetch(`/api/purchases/`)
+      .then((response) => response.json())
+      .then((data: Purchase[]) => {
+        const debts = data.filter((item) => item.status === 'Belum Lunas');
+        return debts;
+      })
+      .catch((error) => {
+        console.error('Error fetching debts:', error);
+        return [];
+      });
+  }
+  
+  async function fetchReceiveables(): Promise<Receiveable[]> {
+    return fetch(`/api/receiveables/`)
+      .then((response) => response.json())
+      .then((data: Receiveable[]) => {
+        return data;
+      })
+      .catch((error) => {
+        console.error('Error fetching receiveables:', error);
+        return [];
+      });
+  }
+
+
+  useEffect(() => {
+    Promise.all([fetchOrders(), fetchDebts(), fetchReceiveables()])
+      .then(([orders, debts, receiveables]) => {
+        setSummaryData((prev) => [
+          ...prev,
+          { label: 'Total Saldo Kas', value: orders.map((order) => order.total).reduce((acc, value) => acc + value, 0), color: '#4caf50' },
+          { label: 'Total Hutang', value: debts.length > 0 ? debts.map((debt) => debt.total).reduce((acc, value) => acc + value, 0) : 0, color: '#f44336' },
+          { label: 'Total Piutang', value: receiveables.length > 0 ? receiveables.map((rec) => rec.total).reduce((acc, value) => acc + value, 0) : 0, color: '#2196f3' },
+       
+        ]);
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  }, []);
+  
+
   return (
     <div style={{ padding: 32, fontFamily: 'Arial, sans-serif' }}>
       <div style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
-        {summaryData.map((item) => (
+        {summaryData?.map((item) => (
           <div
             key={item.label}
             style={{
@@ -84,15 +114,15 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Grafik Arus Kas */}
-      <div style={{ marginBottom: 32 }}>
+      {/* <div style={{ marginBottom: 32 }}>
         <h3>Grafik Arus Kas</h3>
         <div style={{ maxWidth: 600 }}>
           <Line data={cashFlowData} />
         </div>
-      </div>
+      </div> */}
 
       {/* Notifikasi */}
-      <div>
+      {/* <div>
         <h3>Notifikasi</h3>
         <ul>
           {notifications.map((notif, idx) => (
@@ -101,7 +131,7 @@ const Dashboard: React.FC = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
