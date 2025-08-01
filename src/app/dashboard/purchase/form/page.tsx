@@ -3,7 +3,6 @@ import React, { Suspense, useState, useEffect } from "react";
 import detailStyles from "../../dashboard.module.css";
 import styles from "../../../styles/pos.module.css"
 import Link from "next/link";
-import { formatRupiah } from "@/app/lib/utils";
 import { Purchase } from "@/app/entities/purchase";
 import { useSearchParams } from "next/navigation";
 import { Product } from "@/app/entities/product";

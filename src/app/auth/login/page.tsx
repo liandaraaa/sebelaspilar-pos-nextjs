@@ -88,12 +88,12 @@ const LoginPage = () => {
           {errors.password && <span className={styles.error}>{errors.password}</span>}
         </div>
         <button type="submit" className={styles.button}>Login</button>
-        <div className={styles.footer}>
+        {/* <div className={styles.footer}>
         <label>Dont have an account?</label>
         <Link
         href='/auth/register'>
         <button type="button" className={styles.button}>Create Account</button></Link>
-        </div>
+        </div> */}
       </form>
     </div>
   );
