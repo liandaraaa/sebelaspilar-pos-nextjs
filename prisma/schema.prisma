@@ -48,3 +48,21 @@ model products {
   status      String
   deletedAt   DateTime @default(now())
 }
+
+model debts {
+  id          String   @id @default(cuid())
+  debtName        String
+  total       Int
+  status String
+}
+
+model purchases {
+   id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+  productId String
+  quantity Int
+  total Int
+  status String
+}

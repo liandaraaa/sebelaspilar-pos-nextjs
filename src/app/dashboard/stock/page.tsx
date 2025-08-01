@@ -106,13 +106,14 @@ function StockPage() {
                   Delete
                 </Button>
                   {row.stock === 0 && (
+                   <Link
+                   href={`/dashboard/purchase/form?id=${row.id}`}>
                     <Button
                       variant="outlined"
                       color="secondary"
-                      // onClick={() => handleBuyFromSupplier(row)}
                     >
-                      Beli dari Supplier
-                    </Button>
+                      Beli
+                    </Button></Link>
                   )}
                 </TableCell>
               </TableRow>
