@@ -29,7 +29,7 @@ export async function PUT(
 
     const { id } = await params;
   
-    const { customer, contact, products, total, deliveryDate, deliveryAddress, note } = await request.json();
+    const { customer, contact, products, total, deliveryDate, deliveryAddress, note, statusPayment } = await request.json();
   
     if(!customer || !contact || !products || !total || !deliveryDate || !deliveryAddress ){
       return NextResponse.json({ message: 'customerName, contact, products, total, deliveryDate, deliveryAddress are required' }, { status: 400 });
@@ -45,7 +45,8 @@ export async function PUT(
       total = ${total},
       "deliveryDate" = ${deliveryDate},
       "deliveryAddress" = ${deliveryAddress},
-      note = ${note}
+      note = ${note},
+      "statusPayment" = ${statusPayment}
     WHERE id = ${id}
     `
 

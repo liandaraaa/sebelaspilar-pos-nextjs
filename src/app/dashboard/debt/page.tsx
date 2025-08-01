@@ -6,7 +6,6 @@ import {
   TableRow
 } from '@mui/material';
 import { Product } from '@/app/entities/product';
-import Link from 'next/link';
 import { formatRupiah } from '@/app/lib/utils';
 import { Purchase } from '@/app/entities/purchase';
 
@@ -68,15 +67,6 @@ function DebtPage() {
       <Typography variant="h4" gutterBottom>
         Debts
       </Typography>
-     <Link
-     href='/dashboard/Debt/form'>
-     <Button
-        variant="contained"
-        color="primary"
-        sx={{ mb: 2 }}
-      >
-        Add Debt
-      </Button></Link>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

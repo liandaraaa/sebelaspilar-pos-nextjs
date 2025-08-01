@@ -103,11 +103,12 @@ const FormContent = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const orderData:Order = {
+      ...order,
       customer: formData.get("customer") as string,
       contact: formData.get("contact") as string,
       products: selectedProducts.map((selectedProduct) => ({
         productId: selectedProduct.productId,
-        qty: selectedProduct.qty,
+        qty: selectedProduct.qty, 
       })),
       total: calculateTotalOrder(),
       deliveryDate: formData.get("deliveryDate") as string,
@@ -125,6 +126,31 @@ const FormContent = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(orderData),
+    })
+    .then((response) => response.json())
+    .then((data:Order) => {
+      if(data?.statusPayment === 'Lunas'){
+        window.location.href = "/dashboard/order";
+      }else{
+        createReceiveable(data)
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+  }
+
+  async function createReceiveable(order: Order){
+    const newReceiveable = {
+      orderId: order.id,
+      total : order.total
+    }
+    await fetch("/api/receiveables", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newReceiveable),
     })
     .then((response) => response.json())
     .then(() => {
