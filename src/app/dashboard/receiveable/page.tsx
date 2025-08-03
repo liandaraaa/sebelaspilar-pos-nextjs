@@ -61,6 +61,8 @@ function ReceiveablePage() {
           <TableBody>
             {receiveableList?.map((receiveable) => {
               const currentOrder = orderList?.find((ord)=>ord.id === receiveable.orderId)
+              console.log('cek current order', currentOrder)
+              console.log('cek current rec', receiveable)
               return (
                 <TableRow key={receiveable.orderId}>
                   <TableCell>{currentOrder?.customer}</TableCell>

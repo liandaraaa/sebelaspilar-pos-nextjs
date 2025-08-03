@@ -143,7 +143,7 @@ const FormContent = () => {
   async function createReceiveable(order: Order){
     const newReceiveable = {
       orderId: order.id,
-      total : order.total
+      total : 0
     }
     await fetch("/api/receiveables", {
       method: "POST",

@@ -105,17 +105,42 @@ const OrderList: React.FC = () => {
     console.log(suratJalanContent); // Replace with actual print logic
   };
 
-   async function deleteData(orderId:string){
-    await fetch(`/api/orders/${orderId}`, {
+   async function deleteOrder(orderId:string):Promise<boolean>{
+    return fetch(`/api/orders/${orderId}`, {
       method: 'DELETE'
     }).then(() => {
-        dispatch(setStatus('idle'))
+      dispatch(setStatus('idle'))
+        return true
         })
         .catch((error) => {
           console.error('Error fetching order:', error);
+          return false
         });
       }
-  
+
+      async function deleteReceiveable(orderId:string):Promise<boolean>{
+        return fetch(`/api/receiveables/${orderId}`, {
+          method: 'DELETE'
+        }).then(() => {
+            return true
+            })
+            .catch((error) => {
+              console.error('Error fetching order:', error);
+              return false
+            });
+          }
+          
+   async function deleteData(orderId:string){
+    Promise.all([deleteOrder(orderId),deleteReceiveable(orderId)])
+    .then((values)=>{
+      if(values.every((v)=>v===true)){
+        dispatch(setStatus('idle'))
+      }
+    })
+    .catch((error)=>{
+      console.error(error)
+    })
+   }
 
   return (
     <div className={styles.fullscreenContainer}>
